@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
-from metadata import Metadata
+#from metadata import Metadata
 import matplotlib.pyplot as plt
 import pickle as pkl
 from math import exp, sqrt, log
@@ -21,6 +21,9 @@ from tensorflow.keras.regularizers import l2, l1
 from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn import neighbors
+
+path_to_file = "/home/russell/hoffman/JSTA/CoreFunctions"
+#REPLACE-WITH-PATH
 
 def combine_matrices_and_predict_probs(ref, query,combined_qu_ref, n_comb_cells,
                                        clf_cell_pred, ref_celltypes, n_components):
@@ -276,8 +279,7 @@ def get_real_pixels(spots, approximate_binsize, genes_mer, pix_shape,dtype=np.fl
     for i,gene in enumerate(genes_mer):
         print(gene)
         toc = time()
-        if i != 0:
-            print(i/ngene, "done in ", (toc-tic)/60, " minutes")
+
         spots_temp = spots[spots.gene == gene]
         z_counter = 0
         for z in range(1,len(z_bins),1):
@@ -323,8 +325,9 @@ def get_locations(spots, approximate_binsize):
     locations[:,:,:,2] = Z
     return locations
 
-def fast_kde_all_spots(spots, approximate_binsize,
-                       bandwidth,dist_divisor,dtype=np.float32):
+
+def fast_de_all_spots(spots, approximate_binsize,
+                       bandwidth):
     '''
     Runs psuedo-kde for all genes
     ---------------------
@@ -337,17 +340,17 @@ def fast_kde_all_spots(spots, approximate_binsize,
         kde_data: 4d array of all kde data for every gene (4th dimension)
     '''
     positions, x_shape = get_positions_for_kde(spots, approximate_binsize)
-    kde_data = np.zeros((x_shape[0],x_shape[1],x_shape[2],len(np.unique(spots.gene))),dtype=dtype)
+    kde_data = np.zeros((x_shape[0],x_shape[1],x_shape[2],len(np.unique(spots.gene))))
     for i,gene in enumerate(np.unique(spots.gene)):
         print(gene, i)
         temp = spots[spots.gene == gene]
         kde_data[:,:,:,i] = fast_kde_spot(temp, positions,
                                           approximate_binsize, bandwidth,
-                                          x_shape,dist_divisor)
+                                          x_shape)
     return kde_data
 
 def fast_kde_spot(spots, positions, approximate_binsize,
-                  bandwidth,x_shape,dist_divisor):
+                  bandwidth,x_shape):
     '''
     Wrapper for running fast_kde_with_knn for the spots
     ---------------------
@@ -361,7 +364,7 @@ def fast_kde_spot(spots, positions, approximate_binsize,
     '''
     coords = spots.loc[:,['x','y','z']].to_numpy()
     spot_dense = np.reshape(fast_kde_with_knn(positions, coords,
-                                              bandwidth,dist_divisor),x_shape)
+                                              bandwidth),x_shape)
     return spot_dense
 
 def kde_nuclei(spots, nuclei,
@@ -416,7 +419,7 @@ def get_positions_for_kde(spots, approximate_binsize):
     positions = np.vstack([X.ravel(),Y.ravel(),Z.ravel()]).T
     return positions, X.shape
 
-def fast_kde_with_knn(positions, coords, nneigh, dist_divisor):
+def fast_kde_with_knn(positions, coords, nneigh):
     '''
     Pseudo-KDE by dividing the number of points near the point of interest
     by the volumne take to get to that number
@@ -436,6 +439,7 @@ def fast_kde_with_knn(positions, coords, nneigh, dist_divisor):
     denom = ((4/3*3.14))*distances[:,nneigh-1]**3
     denom = np.maximum(denom,1e-1)
     return nneigh/denom
+
 
 def get_real_binsize(one_direction, approx_binsize):
     '''
@@ -486,129 +490,29 @@ def shrink_window(df, x_min, x_max, y_min, y_max):
                (df.y < y_max)]
     return new_df
 
-#Functions this will be put in a separate file
-def create_ring_around_nucleus(nuc_center, n_surroundings, radius):
+def plot_segmentation(assignment, cmap='nipy_spectral'):
     '''
-    Takes a center point and creates a ring around it with a specified radius and number of points
-    ---------------------
-    parameters:
-        nuc_center: tuple of x and y coordinates for the center of the nucleus
-        n_surroundings: number of points around the circle
-        radius: distance of each point to the circles
-    ---------------------
-    return:
-        ring: list of tuples with x,y coordinates
-    '''
-    pi = 3.14
-    radians_per_point = np.arange(0,2*pi,2*pi/n_surroundings)
-    ring = [(radius*cos(rad)+nuc_center[0],radius*sin(rad)+nuc_center[1]) for rad in radians_per_point]
-    return ring
-
-def compute_accuracy(pred_ids, true_ids):
-    '''
-        Gets the accuracy of the segmentation not including truly empty pixels
+        Plots segmentation map as the max value through the z-stack
         ---------------------
         parameters:
-            pred_ids: 3d tensor of the pixel classification
-            true_ids: 3d tensor of the true pixel classification
-        ---------------------
-        return:
-            accuracy of non-zero pixels
+            assignment: 3d array of the cell segmentation map
+            cmap: matplotlib color map to use
     '''
-    diff_map = true_ids - pred_ids
-    diff_map[diff_map != 0] = 1
-    #non_zero_mask
-    nzm = np.where(true_ids != -1)
-    num_wrong = np.sum(diff_map[nzm[0],nzm[1],nzm[2]])
-    num_total = len(nzm[0])
-    return 1 - num_wrong/num_total
 
-def compute_true_pos_rate(pred_ids, true_ids):
-    '''
-        Gets the accuracy of the predicted ids not including truly empty pixels
-        ---------------------
-        parameters:
-            pred_ids: 3d tensor of the pixel classification
-            true_ids: 3d tensor of the true pixel classification
-        ---------------------
-        return:
-            true positive rate
-    '''
-    p_ids = pred_ids.copy()
-    diff_map = true_ids - p_ids
-    diff_map[diff_map != 0] = 1
-    nzm = np.where(true_ids == -1)
-    p_ids[nzm[0],nzm[1],nzm[2]] = -1
-    #non zero mask
-    nzm = np.array(np.where(p_ids != -1))
-    
-    num_wrong = np.sum(diff_map[nzm[0],nzm[1],nzm[2]])
-    num_total = len(nzm[0])
-    return 1 - num_wrong/num_total
+    #rearange the cell ids so the coloring is more spread out
+    colors = np.unique(assignment)
+    copy_assign = assignment.copy()
+    np.random.shuffle(colors)
+    colors[colors == -1] = colors[0]
+    colors[0] == -1
+    for i,c in enumerate(np.unique(copy_assign)):
+        #skip -1 in the segmentation map
+        if c != -1:
+            copy_assign[copy_assign == c] = colors[i]
 
-def compute_metrics(prd, tr):
-    '''
-        Computes the accuracy and true positive rate of pixel ids
-        ---------------------
-        parameters:
-            prd: 3d tensor predicted pixel ids
-            tr: 3d tensor true pixel ids
-        ---------------------
-        return:
-            perc_right: accuracy
-            perc_pred_right: true positive rate
-    '''
-    perc_right = compute_accuracy(prd, tr)
-    print('percent pixels right:',perc_right)
-    perc_pred_right = compute_true_pos_rate(prd, tr)
-    print('percent right of predicted:', perc_pred_right)
-    return perc_right, perc_pred_right
-    
-def compute_cellspec_metrics(prd, tr, groups, tr_cell):
-    '''
-        Computes the accuracy and true positive rate of pixel cell type ids
-        ---------------------
-        parameters:
-            prd: 3d tensor predicted pixel ids
-            tr: 3d tensor true pixel ids
-            groups: celltype classification of predicted ids
-            tr_cell: true celltype classification
-        ---------------------
-        return:
-            perc_right: accuracy
-            perc_pred_right: true positive rate
-    '''
-    celltype_mat = groups[prd]
-    celltype_mat[prd == -1] = -1
-    true_celltype_map = tr_cell[tr]
-    true_celltype_map[tr == -1] = -1
-    
-    
-    #print(Counter(celltype_mat.ravel()))
-    #print(Counter(true_celltype_map.ravel()))
-    return perc_right, perc_pred_right
-
-def pixel_pca(pix, npcs):
-    '''
-        Centers and scales the data before performing SVD
-        ---------------------
-        parameters:
-            pix: 4d tensor, 4th dimension is gene expression
-            npcs: number of pcs to compute
-        ---------------------
-        return:
-            cp_grid: 4d tensor, 4th dimension is number of pcs
-    '''
-    return pix
-    nz = np.where(np.sum(pix,axis=3) != 0)
-    mod_pix = pix[nz[0],nz[1],nz[2],:]
-    mod_pix = scale(mod_pix,axis=0)
-
-    svd = TruncatedSVD(n_components = npcs,algorithm='arpack').fit(mod_pix)
-    cp_grid = np.dot(pix, svd.components_.T)
-
-    return cp_grid
-
+    #plot the max value through the z-stack
+    plt.imshow(np.max(copy_assign, axis=2),
+               cmap=cmap)
 
 def reclassify_squares(pix, pixl_true, surround_count, 
                        same_cts,
@@ -1256,9 +1160,9 @@ c_args = [ndpointer(dtype=np.uintp,ndim=1,flags='C'),
          ctypes.c_int, ctypes.c_int,
          ndpointer(dtype=np.uintp,ndim=1,flags='C')]
 
-dist_func_c = ctypes.CDLL("./get_distances.so")
+dist_func_c = ctypes.CDLL(path_to_file+"/get_distances.so")
 get_d = dist_func_c.get_distances
 dist_func_c.get_distances.argtypes = c_args
 get_d.restype = None
-get_num_surr_func_c = ctypes.CDLL("./get_number_similar_surroundings.so")
+get_num_surr_func_c = ctypes.CDLL(path_to_file+"/get_number_similar_surroundings.so")
 get_sur = get_num_surr_func_c.get_sur
