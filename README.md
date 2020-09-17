@@ -20,7 +20,7 @@ Initially, watershed based segmentation is performed and a cell level type class
 Simulate spatial transcriptomics data from a reference dataset:  
 Files needed:  
   - scRNAseq Reference:
-    - cellsxgenes matrix
+    - cells x genes matrix
   - Reference celltypes: 
     - cell type vector 
 <p align="center">
