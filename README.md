@@ -34,6 +34,7 @@ Files needed:
   - mRNA spots: 
     - spots x 4 matrix 
     - Columns: gene name, x, y, z  
+    - Rows: Each mRNA spot
   - nuclei: 
     - pixels x 4 matrix; 
     - Columns: cell id, x, y, z 
