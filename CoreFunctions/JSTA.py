@@ -12,8 +12,6 @@ from sklearn.preprocessing import scale
 from skimage.segmentation import watershed
 from numpy.ctypeslib import ndpointer
 import ctypes
-#from BuildAllenTree import buildallentree
-#from BuildAllenTree import get_celltype_name_map
 from tensorflow.keras.layers import Input, Dense, BatchNormalization
 from tensorflow.keras.models import Model
 from tensorflow.keras.regularizers import l2, l1
