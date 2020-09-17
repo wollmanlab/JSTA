@@ -34,4 +34,4 @@ Files needed:
 <p align="center">
   <img src=/images/SegmentedHippocampus.png>
 </p>  
-High resolution cell type map of 133 cell (sub)types. Colors match those defined by NCTT. Scale bar is 500 microns.
+High resolution cell type map of 133 cell (sub)types. Colors match those defined by Neocortical Cell Type Taxonomy. Scale bar is 500 microns.
