@@ -30,7 +30,7 @@ Representative synthetic dataset of nuclei (black) and mRNAs, where each color r
 Run our quick implementation of density estimation, and segmentation with JSTA!  
 Files needed:  
   mRNA spots: spots x 4 matrix; Columns: gene name, x, y, z  
-  nuclei: nuclei pixels x 4 matrix; Columns: cell id, x, y, z; Rows: Each pixel of nucleus 
+  nuclei: pixels x 4 matrix; Columns: cell id, x, y, z; Rows: Each pixel of nucleus 
   scRNAseq Reference: cellsxgenes matrix
   Reference celltypes: cell type vector 
 <p align="center">
