@@ -14,7 +14,6 @@ void get_distances(const double **surroundings, const double **nuc_assign, const
 			surr = surroundings[i][j];
 			//iterate through nuclei
 			for(k=0;k<num_nuc;k++){
-				//this part is wrong the rest of it works though{
 				if(surr == nuc_assign[i][k]){
 					dist_mat[i][j] = dists[i][k];
 					break;
