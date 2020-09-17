@@ -19,8 +19,8 @@ Initially, watershed based segmentation is performed and a cell level type class
 ### tutorials/SimulatingData.ipynb
 Simulate spatial transcriptomics data from a reference dataset:  
   Files needed:  
-    file1:  
-    file2:  
+    scRNAseq Reference: cellsxgenes matrix
+    Reference celltypes: cell type vector 
 <p align="center">
   <img width="750", src=/images/SimulatedData.png>
 </p>
@@ -29,8 +29,10 @@ Representative synthetic dataset of nuclei (black) and mRNAs, where each color r
 ### tutorials/RunningJSTA.ipynb  
 Run our quick implementation of density estimation, and segmentation with JSTA!  
 Files needed:  
-  file1:  
-  file2:  
+  mRNA spots: spotsx4 matrix; Columns: gene name, x, y, z  
+  nuclei: nuclei pixels x 4 matrix; Columns: cell id, x, y, z; Rows: Each pixel of nucleus 
+  scRNAseq Reference: cellsxgenes matrix
+  Reference celltypes: cell type vector 
 <p align="center">
   <img src=/images/SegmentedHippocampus.png>
 </p>  
