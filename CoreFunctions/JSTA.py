@@ -19,8 +19,7 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn import neighbors
 
-path_to_file = "/home/russell/hoffman/JSTA/CoreFunctions"
-#REPLACE-WITH-PATH
+path_to_file = #REPLACE-WITH-PATH
 
 def combine_matrices_and_predict_probs(ref, query,combined_qu_ref, n_comb_cells,
                                        clf_cell_pred, ref_celltypes, n_components):
