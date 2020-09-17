@@ -22,7 +22,7 @@ Simulate spatial transcriptomics data from a reference dataset:
     file1:  
     file2:  
 <p align="center">
-  <img width="2000", src=/images/SimulatedData.png>
+  <img width="750", src=/images/SimulatedData.png>
 </p>
 Representative synthetic dataset of nuclei (black) and mRNAs, where each color represents a different gene (left). Ground truth boundaries of the cells. Each color represents a different cell (right). 
 
