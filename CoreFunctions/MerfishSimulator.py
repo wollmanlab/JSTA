@@ -11,7 +11,6 @@ import sys
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import scale
 from sklearn.linear_model import LogisticRegression
-from umap import UMAP
 from sklearn.model_selection import train_test_split
 
 class merfish_data_generator:
