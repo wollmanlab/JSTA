@@ -619,7 +619,7 @@ def reclassify_squares(pix, pixl_true,
                                               first_epochs, lrs)
             else:
                 clf_log = train_nn_classifier(sub_merged_pix, sub_group_labels, clf_log,
-                                              second_epochs, lrs[-1])
+                                              second_epochs, [lrs[-1]])
 
             toc = time()
             print('time to train ', len(subset_indices), 'samples ', toc-tic)
