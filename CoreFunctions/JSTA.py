@@ -948,7 +948,7 @@ def create_celltype_classifier(sf, sc, nlayers=2, l1_reg=1e-3,
                          metrics=['accuracy'])
         clf_cell.fit(X_train, y_train,
                      validation_data=(np.array(X_test), np.array(y_test)),
-                     epochs=20,
+                     epochs=epochs,
                      batch_size=64,
                      use_multiprocessing=True)
 
