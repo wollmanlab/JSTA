@@ -848,8 +848,7 @@ def reclassify_squares(pix, pixl_true,
                 # remove 0 pad from cell assignment
                 cs = cell_assign.shape
                 cell_assign = cell_assign[1:cs[0]-1, 1:cs[1]-1, 1:cs[2]-1]
-                cell_assign[copy_cell_assign != -
-                            1] = copy_cell_assign[copy_cell_assign != -1].copy()
+                cell_assign[copy_cell_assign != -1] = copy_cell_assign[copy_cell_assign != -1].copy()
 
                 bord_x, bord_y, bord_z = borders_to_flip[:,
                                                          0], borders_to_flip[:, 1], borders_to_flip[:, 2]
