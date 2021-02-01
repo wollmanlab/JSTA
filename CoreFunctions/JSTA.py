@@ -687,7 +687,7 @@ def reclassify_squares(pix, pixl_true,
                                                                                        bord_y,
                                                                                        bord_z, :])
 
-                pixels_to_nuclei_vec = nuc.id.to_numpy()[pixels_to_nuclei_vec]
+                pixels_to_nuclei_vec = nuc.id.to_numpy().astype('float64')[pixels_to_nuclei_vec]
                 toc = time()
                 print('time to predict nuclei distance:', toc-tic)
 
