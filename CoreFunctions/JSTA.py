@@ -72,7 +72,7 @@ def get_cell_centers(nuc):
         nuc_id.append(int(ind))
         temp = nuc[nuc.id == ind]
         x_cent, y_cent, z_cent = np.mean(temp.x), np.mean(temp.y), np.mean(temp.z)
-        cell_centers.append([x_cent, y_wcent, z_cent])
+        cell_centers.append([x_cent, y_cent, z_cent])
     cell_centers = np.array(cell_centers)
     nuc_id = np.array(nuc_id)
     return cell_centers, nuc_id
