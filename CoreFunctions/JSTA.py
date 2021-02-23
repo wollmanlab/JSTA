@@ -19,7 +19,7 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn import neighbors
 
-path_to_file = #REPLACE-WITH-PATH
+path_to_file = "/home/russell/hoffman/JSTA/CoreFunctions"
 
 def find_empty_pixels(pix):
     '''
