@@ -106,9 +106,7 @@ def get_spatial_pval(cells_mat, celltypes, cell_cent, ct, nneighbors, nperm):
 
     if neighborhoods_output is not None:
 
-        gm, nm = get_neighborhoods_with_null(cells_mat, celltypes,
-                                      cell_cent, ct,nneighbors,
-                                      nperm)
+        gm, nm = neighborhoods_output
 
         ps_mat_raveled = []
         for i in range(gm.shape[1]):
