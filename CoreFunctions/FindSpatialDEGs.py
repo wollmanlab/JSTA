@@ -111,13 +111,13 @@ def get_spatial_pval(cells_mat, celltypes, cell_cent, ct, nneighbors, nperm):
         ps_mat_raveled = []
         for i in range(gm.shape[1]):
             nm_rav = nm[:, :, i]
-            if np.max(gm[:, i]) > 5:
-                var_vec = np.var(nm_rav, axis=1)
-                real_var = np.var(gm[:, i])
 
-                p = 1 - (np.sum(real_var > var_vec) / len(var_vec))
+            var_vec = np.var(nm_rav, axis=1)
+            real_var = np.var(gm[:, i])
 
-                ps_mat_raveled.append([p, i])
+            p = 1 - (np.sum(real_var > var_vec) / len(var_vec))
+
+            ps_mat_raveled.append([p, i])
 
         return ps_mat_raveled
 
