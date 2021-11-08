@@ -939,7 +939,8 @@ def create_celltype_classifier(sf, sc, nlayers=2, l1_reg=1e-3,
 
     X_train, X_test, y_train, y_test = train_test_split(scaled_ref, sc,
                                                         test_size=test_size,
-                                                        random_state=0)
+                                                        random_state=0,
+                                                       stratify=sc)
 
     for lr in lrs:
         adam = Adam(learning_rate=lr)
@@ -975,7 +976,8 @@ def pixel_nn_classifier(mp,sc,nlayer, l2_reg):
     
 def train_nn_classifier(mp,sc,clf,epo,lrs):
     X_train, X_test, y_train, y_test = train_test_split(mp, sc,
-                                                   test_size = 0.2,random_state = 0)
+                                                   test_size = 0.2,random_state = 0,
+                                                       stratify=sc)
     for lr in lrs:
         adam = Adam(learning_rate = lr)
         clf.compile(optimizer = 'Adam',
