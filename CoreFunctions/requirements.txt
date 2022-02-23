@@ -2,5 +2,13 @@ tensorflow
 scikit-learn
 scikit-image
 numpy
+notebook
 matplotlib
 pandas
+seaborn 
+scikit-learn 
+statsmodels 
+numba 
+pytables
+python-igraph
+leidenalg

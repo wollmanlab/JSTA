@@ -19,7 +19,7 @@ from tensorflow.keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from sklearn import neighbors
 
-path_to_file = #REPLACE-WITH-PATH
+path_to_file = "/home/russell/hoffman/jsta_tutorial/JSTA/CoreFunctions"
 
 def find_empty_pixels(pix):
     '''
@@ -150,7 +150,7 @@ def classify_pixels_to_nuclei(locs, nuclei_clust, dist_threshold):
         nuclei_clust: dataframe of nuclei spots
         dist_threshold: maximum distance away from nucleus for classification
     '''
-    neighbors_classifier = neighbors.NearestNeighbors(1)
+    neighbors_classifier = neighbors.NearestNeighbors(n_neighbors=1)
     neighbors_classifier.fit( nuclei_clust.loc[:,['x','y','z']].values,nuclei_clust.id)
     l = locs.shape
     new_locs = np.reshape(locs, (l[0]*l[1]*l[2],3))
@@ -939,8 +939,7 @@ def create_celltype_classifier(sf, sc, nlayers=2, l1_reg=1e-3,
 
     X_train, X_test, y_train, y_test = train_test_split(scaled_ref, sc,
                                                         test_size=test_size,
-                                                        random_state=0,
-                                                       stratify=sc)
+                                                        random_state=0)
 
     for lr in lrs:
         adam = Adam(learning_rate=lr)
@@ -976,8 +975,7 @@ def pixel_nn_classifier(mp,sc,nlayer, l2_reg):
     
 def train_nn_classifier(mp,sc,clf,epo,lrs):
     X_train, X_test, y_train, y_test = train_test_split(mp, sc,
-                                                   test_size = 0.2,random_state = 0,
-                                                       stratify=sc)
+                                                   test_size = 0.2,random_state = 0)
     for lr in lrs:
         adam = Adam(learning_rate = lr)
         clf.compile(optimizer = 'Adam',
