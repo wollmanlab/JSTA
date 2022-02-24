@@ -1,4 +1,4 @@
-python=3.7
+python=3.6.10
 tensorflow
 scikit-learn
 scikit-image
