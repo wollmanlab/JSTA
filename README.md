@@ -11,6 +11,8 @@ Initially, watershed based segmentation is performed and a cell level type class
   With pip:  
       ``` pip install -r CoreFunctions/requirements.txt ```  
   With conda:  
+      ```conda create -n jsta -f CoreFunctions/environment.yml```  
+      or  
       ```conda install --file CoreFunctions/requirements.txt```  
 ### Compile c files, and add current path to functions:  
   ```./install.sh```   
